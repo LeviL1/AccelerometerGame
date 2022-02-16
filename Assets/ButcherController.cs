@@ -14,11 +14,12 @@ public class ButcherController : MonoBehaviour
     private float lowerForceBound;
     [SerializeField]
     private float upperForceBound;
-    private bool canMove = true;
+    public bool canMove = true;
+    public bool canDropSteak = true;
     [SerializeField] private Transform spawnPoint;
     [SerializeField] private GameObject Steak;
     [SerializeField]
-    private bool canDrop = false;
+    public bool canDrop = false;
     [SerializeField]
     private float dropInterval = 1f ;
     // Start is called before the first frame update
@@ -34,11 +35,17 @@ public class ButcherController : MonoBehaviour
             inRoutine = true;
             StartCoroutine(ButcherMovement());
         }
-        if (!canDrop) 
+        if (!canDrop && canDropSteak) 
         {
             canDrop = true;
             StartCoroutine(DropSteak());
         }
+    if (!canMove) 
+    {
+      
+      rb.velocity = new Vector2(0, 0);
+
+    }
     }
 
     IEnumerator ButcherMovement() 
@@ -61,9 +68,13 @@ public class ButcherController : MonoBehaviour
     }
     IEnumerator DropSteak() 
     {
-        Instantiate(Steak, spawnPoint);
-        yield return new WaitForSeconds(dropInterval);
-        canDrop = false;
+    if (canDropSteak)
+    {
+      Instantiate(Steak, spawnPoint);
+      yield return new WaitForSeconds(dropInterval);
+      canDrop = false;
+    }
+    
     }
 
 }

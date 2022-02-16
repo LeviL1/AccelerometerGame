@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class SteakCaught : MonoBehaviour
 {
-
-    private void OnTriggerEnter2D(Collider2D collision)
+  private ButcherController butcher;
+  private void Awake()
+  {
+    butcher = GameObject.FindGameObjectWithTag("Butcher").GetComponent<ButcherController>();
+  }
+  private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player")) 
         {
@@ -13,4 +17,12 @@ public class SteakCaught : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
+  private void Update()
+  {
+    if (!butcher.canMove) 
+    {
+      this.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+      this.GetComponent<Rigidbody2D>().gravityScale = 0f;
+    }
+  }
 }
